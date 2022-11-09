@@ -31,6 +31,29 @@ const updateWordInProgress = function (word) {
   console.log(word);
 };
 
+const validateInput = function (input) {
+  const acceptedLetter = /[a-zA-Z]/;
+  const isValid = "Please enter a valid letter";
+  const pInner = function (msg) {
+    message.innerText = msg;
+  };
+
+  if (input === "") {
+    pInner(isValid);
+    console.log(isValid);
+  } else if (input.length > 1) {
+    pInner("Please enter only one letter at a time.");
+    console.log("Please enter only one letter at a time.");
+  } else if (input.match(acceptedLetter)) {
+    pInner(`You entered a ⌨️ ${input} 🖱️`);
+    console.log(`You entered a ⌨️ ${input} 🖱️`);
+  } else {
+    pInner(isValid);
+    console.log(isValid);
+  }
+
+  return input;
+};
 // ==== event listener ====
 
 guessBtn.addEventListener("click", function (e) {
@@ -41,6 +64,15 @@ guessBtn.addEventListener("click", function (e) {
   setTimeout(function () {
     letter.value = "";
   }, 1000);
+
+  message.innerText = "";
+  validateInput(letterValue);
+});
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" || e.key === "Enter") {
+    window.location.reload();
+  }
 });
 
 updateWordInProgress(word);
