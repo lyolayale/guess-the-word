@@ -16,6 +16,7 @@ body {
   background-size: 800px;
   background-repeat: repeat;
   color: #305050;
+  animation: bg-color 10s linear infinite;
 }
 
 .logo {
@@ -35,9 +36,11 @@ h1 {
 }
 
 .container {
-  background: radial-gradient(50% 50% at 50% 50%,
+  background: radial-gradient(
+    50% 50% at 50% 50%,
     rgba(167, 237, 237, 0.3) 0%,
-    rgba(156, 226, 226, 0) 100%);
+    rgba(156, 226, 226, 0) 100%
+  );
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -153,5 +156,22 @@ input:focus {
 
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes bg-color {
+  25% {
+    background-color: rgba(255, 182, 193, 0.503);
+  }
+  50% {
+    background-color: #dff6f6;
+  }
+
+  75% {
+    background-color: rgba(255, 182, 193, 0.503);
+  }
+
+  100% {
+    background-color: #dff6f6;
   }
 }
