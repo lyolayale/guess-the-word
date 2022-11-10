@@ -43,23 +43,27 @@ const updateWordInProgress = function (word) {
 
 const validateInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/;
-  const isValid = `Please enter an valid letter - Your invalid choice was: ${input.toUpperCase()}.`;
+  const isValid = `Please enter an valid letter - Your invalid choice was: ${input.toUpperCase()}`;
+
   const pInner = function (msg) {
     message.innerText = msg;
   };
 
   if (input === "") {
     pInner(isValid);
-    console.log(isValid);
+    remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
+    // console.log(isValid);
   } else if (input.length > 1) {
     pInner("Please enter only one letter at a time.");
-    console.log("Please enter only one letter at a time.");
+    remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
+    // console.log("Please enter only one letter at a time.");
   } else if (input.match(acceptedLetter)) {
     pInner(`You entered the letter ${input.toUpperCase()}`);
-    console.log(`You entered a ⌨️ ${input} 🖱️`);
+    // console.log(`You entered a ⌨️ ${input} 🖱️`);
   } else {
     pInner(isValid);
-    console.log(isValid);
+    remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
+    // console.log(isValid);
   }
 
   return input;
@@ -73,10 +77,12 @@ const makeGuess = function (letter) {
     if (!guessedLetters.includes(letter)) {
       guessedLetters.push(letter);
       updateGuessLettersList();
+      remainingGuessesCount(letter);
       updateWord(guessedLetters);
     } else {
       message.innerText = `You already guessed the letter ${letter}.
     Please try again.`;
+      remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
     }
   }
 };
@@ -113,6 +119,27 @@ const updateWord = function (arr) {
   winner();
 };
 
+// -- remainingGuessesCount fn --
+
+const remainingGuessesCount = function (guess) {
+  let theWord = word.toUpperCase();
+
+  if (!theWord.includes(guess)) {
+    remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
+    message.innerText = `Wrong Guess! The word has no ${guess}.`;
+  } else {
+    message.innerText = `Good guess! The word has the letter ${guess}.`;
+  }
+
+  if (remainingGuesses <= 0) {
+    remainingGuesses = 0;
+    message.innerText = `Your ran out of guess (${remainingGuesses} Remaining):
+      GAME OVER!
+    `;
+    remainingGuessNum.innerText = `${remainingGuesses}`;
+  }
+};
+
 // -- winner fn ---
 
 const winner = function () {
@@ -140,12 +167,12 @@ guessBtn.addEventListener("click", function (e) {
   makeGuess(validate);
   console.log(guessedLetters);
 
-  // -- dynamic guesses remaining --
+  // // -- dynamic guesses remaining --
 
-  remainingGuessNum.innerText = `${(count -= 1)} guesses`;
-  if (count === 0) {
-    remainingGuessesDiv.innerText = "Game Over";
-  }
+  // remainingGuessNum.innerText = `${(count -= 1)} guesses`;
+  // if (count === 0) {
+  //   remainingGuessesDiv.innerText = "Game Over";
+  // }
 });
 
 document.addEventListener("keydown", function (e) {
