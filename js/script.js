@@ -13,18 +13,36 @@ const remainingGuessNum = document.querySelector(".remaining span");
 const message = document.querySelector(".message");
 const playAgainBtn = document.querySelector(".play-again");
 
-const word = "car";
+let word;
 // wordInProgress.innerText = word;
 
 const guessedLetters = [];
-let remainingGuesses = word.length * 2;
+let remainingGuesses = 8;
 remainingGuessNum.innerText = remainingGuesses + " guesses";
+
+const getWord = async function (
+  url = "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"
+) {
+  const res = await fetch(url);
+  const data = await res.text();
+  const arr = data.split("\n");
+
+  const randomWord = arr[Math.floor(Math.random() * arr.length)];
+
+  word = randomWord.trim();
+
+  console.log(word); // confirm game is renedering correct word
+
+  updateWordInProgress(word);
+};
+
+getWord();
 
 // ==== functions ====
 
 // -- updateWordInProgress fn ---
 
-const updateWordInProgress = function (word) {
+const updateWordInProgress = async function (word) {
   let arr = [];
 
   word = word.split("");
@@ -148,7 +166,7 @@ const winner = function () {
     message.innerHTML =
       "<p class='hightlight'>You guessed correct the word! Congrats!</p>";
   }
-  console.log(wordInProgress.innerText, word);
+  // console.log(wordInProgress.innerText, word);
 };
 
 // ==== event listener ====
@@ -156,7 +174,7 @@ const winner = function () {
 guessBtn.addEventListener("click", function (e) {
   e.preventDefault();
   let letterValue = letter.value;
-  console.log(letterValue);
+  // console.log(letterValue);
 
   setTimeout(function () {
     letter.value = "";
@@ -165,7 +183,7 @@ guessBtn.addEventListener("click", function (e) {
   message.innerText = "";
   const validate = validateInput(letterValue);
   makeGuess(validate);
-  console.log(guessedLetters);
+  // console.log(guessedLetters);
 
   // // -- dynamic guesses remaining --
 
@@ -180,5 +198,3 @@ document.addEventListener("keydown", function (e) {
     window.location.reload();
   }
 });
-
-updateWordInProgress(word);
