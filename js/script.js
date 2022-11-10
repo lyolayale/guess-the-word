@@ -43,7 +43,7 @@ const updateWordInProgress = function (word) {
 
 const validateInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/;
-  const isValid = "Please enter a valid letter";
+  const isValid = `Please enter an valid letter - Your invalid choice was: ${input.toUpperCase()}.`;
   const pInner = function (msg) {
     message.innerText = msg;
   };
