@@ -17,8 +17,8 @@ const word = "car";
 // wordInProgress.innerText = word;
 
 const guessedLetters = [];
-let count = word.length * 2;
-remainingGuessNum.innerText = count + " guesses";
+let remainingGuesses = word.length * 2;
+remainingGuessNum.innerText = remainingGuesses + " guesses";
 
 // ==== functions ====
 
