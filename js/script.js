@@ -190,6 +190,8 @@ const theWordGame = {
       makeGuess(validate);
     });
 
+    // -- document relaod eventListener --
+
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
         window.location.reload();
