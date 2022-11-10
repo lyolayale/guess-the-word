@@ -36,8 +36,6 @@ const getWord = async function (
   updateWordInProgress(word);
 };
 
-getWord();
-
 // ==== functions ====
 
 // -- updateWordInProgress fn ---
@@ -198,3 +196,5 @@ document.addEventListener("keydown", function (e) {
     window.location.reload();
   }
 });
+
+getWord();
