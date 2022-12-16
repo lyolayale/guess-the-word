@@ -80,17 +80,12 @@ const theWordGame = {
         pInner(isValid);
         remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
       }
-      if (input.length > 1) {
-        pInner("Please enter only one letter at a time.");
-        remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
-      }
+
       if (input.match(acceptedLetter)) {
         pInner(`You entered the letter ${input.toUpperCase()}`);
       } else {
         pInner(isValid);
-        remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
       }
-      console.log(input.length);
       return input;
     };
 
@@ -107,7 +102,6 @@ const theWordGame = {
         } else {
           message.innerText = `You already guessed the letter ${letter}.
     Please try again.`;
-          remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
         }
       }
 
@@ -232,6 +226,7 @@ const theWordGame = {
       guessBtn.classList.add("hide");
       remainingGuessesDiv.classList.add("hide");
       guessedLettersList.classList.add("hide");
+      wordInProgress.classList.add("hide");
 
       playAgainBtn.classList.remove("hide");
       getWord();
