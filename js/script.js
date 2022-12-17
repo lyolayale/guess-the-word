@@ -58,7 +58,7 @@ const theWordGame = {
       let arr = [];
 
       word = word.split("");
-      word.forEach(function (item) {
+      word.forEach(function () {
         arr.push("●");
       });
 
@@ -76,13 +76,12 @@ const theWordGame = {
         message.innerText = msg;
       };
 
-      if (input === "") {
-        pInner(isValid);
-        remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
-      }
-
       if (input.match(acceptedLetter)) {
         pInner(`You entered the letter ${input.toUpperCase()}`);
+      } else if (input.length === 0) {
+        pInner(
+          "Please enter an valid letter - Your invalid choice was: An Empty Input ..."
+        );
       } else {
         pInner(isValid);
       }
