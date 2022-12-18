@@ -83,9 +83,7 @@ const theWordGame = {
         makeGuess(letterValue);
       }
 
-      setTimeout(function () {
-        letter.value = "";
-      }, 1000);
+      letter.value = "";
     });
 
     // --- validateInput fn --
