@@ -182,6 +182,7 @@ const theWordGame = {
         message.innerHTML =
           "<p class='hightlight'>You guessed correct the word! Congrats!</p>";
         startOver();
+        confetti.start();
       }
     };
 
@@ -199,7 +200,6 @@ const theWordGame = {
       guessBtn.classList.add("hide");
       remainingGuessesDiv.classList.add("hide");
       guessedLettersList.classList.add("hide");
-      // wordInProgress.classList.add("hide");
       playAgainBtn.classList.remove("hide");
       remainingGuesses = 6;
     };
@@ -221,6 +221,8 @@ const theWordGame = {
       remainingGuessesDiv.classList.remove("hide");
       guessedLettersList.classList.remove("hide");
       playAgainBtn.classList.add("hide");
+
+      confetti.stop();
 
       // wordInProgress.classList.remove("hide");
     });
