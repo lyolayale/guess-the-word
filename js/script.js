@@ -26,7 +26,6 @@ const theWordGame = {
 
     let guessedLetters = [];
     let remainingGuesses = 6;
-    remainingGuessNum.innerText = remainingGuesses + " guesses";
 
     // ==================
     // ==== async fn ====
@@ -48,6 +47,9 @@ const theWordGame = {
       updateWordInProgress(word);
     };
 
+    // ==== init game --> aysnc fn ====
+    getWord();
+
     //====================
     // ==== functions ====
     // ===================
@@ -55,62 +57,67 @@ const theWordGame = {
     // -- updateWordInProgress fn --
 
     const updateWordInProgress = async function (word) {
-      let arr = [];
+      const arr = [];
 
-      word = word.split("");
-      word.forEach(function () {
+      for (let el of word) {
         arr.push("●");
-      });
+      }
 
-      arr = arr.join(" ");
-      wordInProgress.innerText = arr;
+      wordInProgress.innerText = arr.join("");
     };
+
+    // =========================
+    // ==== event listener ====
+    // =========================
+
+    // -- guessBtn addEvent Listener --
+
+    guessBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      message.innerText = "";
+      const letterValue = letter.value;
+      // console.log(letterValue);
+
+      const validate = validateInput(letterValue);
+      if (validate) {
+        makeGuess(letterValue);
+      }
+
+      setTimeout(function () {
+        letter.value = "";
+      }, 1000);
+    });
 
     // --- validateInput fn --
 
     const validateInput = function (input) {
       const acceptedLetter = /[a-zA-Z]/;
-      const isValid = `Please enter an valid letter - Your invalid choice was: ${input.toUpperCase()}`;
 
-      const pInner = function (msg) {
-        message.innerText = msg;
-      };
-
-      if (input.match(acceptedLetter)) {
-        pInner(`You entered the letter ${input.toUpperCase()}`);
-      } else if (input.length === 0) {
-        pInner(
-          "Please enter an valid letter - Your invalid choice was: An Empty Input ..."
-        );
+      if (input.length === 0) {
+        message.innerText =
+          "Please enter an valid letter - Your invalid choice was: An Empty Input ...";
+      } else if (input.length > 1) {
+        message.innerText = "Please enter only one letter at a time.";
+      } else if (!input.match(acceptedLetter)) {
+        message.innerText = "Please enter a valid letter: A - Z.";
       } else {
-        pInner(isValid);
+        return input;
       }
-      return input;
     };
 
     // -- makeGuess fn ---
 
     const makeGuess = function (letter) {
       letter = letter.toUpperCase();
-      if (letter.match(/[a-zA-Z]/)) {
-        if (!guessedLetters.includes(letter)) {
-          guessedLetters.push(letter);
-          updateGuessLettersList();
-          remainingGuessesCount(letter);
-          updateWord(guessedLetters);
-        } else {
-          message.innerText = `You already guessed the letter ${letter}.
-    Please try again.`;
-        }
-      }
 
-      if (remainingGuesses <= 0) {
-        message.innerHTML = "<p>Better Luck Next Time!</p>";
-        remainingGuesses = 0;
-      }
-
-      if (remainingGuesses === 0) {
-        startOver();
+      if (guessedLetters.includes(letter)) {
+        message.innerText =
+          "You already guessed that letter, please try again!";
+      } else {
+        guessedLetters.push(letter);
+        remainingGuessesCount(letter);
+        updateGuessLettersList();
+        updateWord(guessedLetters);
       }
     };
 
@@ -135,14 +142,12 @@ const theWordGame = {
 
       for (let item of wordArr) {
         if (arr.includes(item)) {
-          newArr.push(item);
+          newArr.push(item.toUpperCase());
         } else {
           newArr.push("●");
         }
-
-        wordInProgress.innerText = newArr.join("");
       }
-
+      wordInProgress.innerText = newArr.join("");
       winner();
     };
 
@@ -152,10 +157,20 @@ const theWordGame = {
       let theWord = word.toUpperCase();
 
       if (!theWord.includes(guess)) {
-        remainingGuessNum.innerText = `${(remainingGuesses -= 1)} guesses`;
+        remainingGuesses -= 1;
         message.innerText = `Wrong Guess! The word has no ${guess}.`;
       } else {
         message.innerText = `Good guess! The word has the letter ${guess}.`;
+      }
+
+      if (remainingGuesses === 0) {
+        remainingGuesses -= 1;
+        message.innerHTML = `Better Luck Next Time! The word was <h2 class="hightlight">${word}</h2>`;
+        startOver();
+      } else if (remainingGuesses === 1) {
+        remainingGuessNum.innerText = `${remainingGuesses} guess`;
+      } else {
+        remainingGuessNum.innerText = `${remainingGuesses} guesses`;
       }
     };
 
@@ -170,26 +185,6 @@ const theWordGame = {
       }
     };
 
-    // =========================
-    // ==== event listeners ====
-    // =========================
-
-    // -- guessBtn addEvent Listener --
-
-    guessBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      let letterValue = letter.value;
-      // console.log(letterValue);
-
-      setTimeout(function () {
-        letter.value = "";
-      }, 1000);
-
-      message.innerText = "";
-      const validate = validateInput(letterValue);
-      makeGuess(validate);
-    });
-
     // -- document relaod eventListener --
 
     document.addEventListener("keydown", function (e) {
@@ -198,38 +193,37 @@ const theWordGame = {
       }
     });
 
-    // -- playAgainBtn addEvent listener --
-
-    playAgainBtn.addEventListener("click", function () {
-      message.classList.remove("win");
-      message.innerHTML = "";
-      guessedLettersList.innerHTML = "";
-
-      guessedLetters = [];
-      remainingGuesses = 6;
-      remainingGuessNum.innerText = remainingGuesses + " guesses";
-
-      guessBtn.classList.remove("hide");
-      remainingGuessesDiv.classList.remove("hide");
-      guessedLettersList.classList.remove("hide");
-
-      playAgainBtn.classList.add("hide");
-    });
-
-    // ==== init game --> aysnc fn ====
-    getWord();
-
     // -- startOver fn --
 
     const startOver = function () {
       guessBtn.classList.add("hide");
       remainingGuessesDiv.classList.add("hide");
       guessedLettersList.classList.add("hide");
-      wordInProgress.classList.add("hide");
-
+      // wordInProgress.classList.add("hide");
       playAgainBtn.classList.remove("hide");
-      getWord();
+      remainingGuesses = 6;
     };
+
+    // -- playAgainBtn addEvent listener --
+
+    playAgainBtn.addEventListener("click", function () {
+      message.classList.remove("win");
+      guessedLetters = [];
+      remainingGuesses = 6;
+      remainingGuessNum.innerText = `${remainingGuesses} guesses`;
+      guessedLettersList.innerHTML = "";
+      message.innerText = "";
+
+      // -- new word --
+      getWord();
+
+      guessBtn.classList.remove("hide");
+      remainingGuessesDiv.classList.remove("hide");
+      guessedLettersList.classList.remove("hide");
+      playAgainBtn.classList.add("hide");
+
+      // wordInProgress.classList.remove("hide");
+    });
   },
 };
 
